@@ -60,7 +60,13 @@ const MainForm = () => {
             inter.className
           )}
         />
-        <button className="ml-8 p-4 hover:opacity-60 duration-75">Go</button>
+        <button
+          type="submit"
+          aria-label="go"
+          className="ml-8 p-4 hover:opacity-60 duration-75"
+        >
+          Go
+        </button>
         {error && (
           <div
             className={classNames(
@@ -73,9 +79,15 @@ const MainForm = () => {
         )}
       </form>
       <div className={classNames("flex flex-col gap-4 mt-10", inter.className)}>
-        {result.map((item, index) => (
-          <>
-            <div className="justify-self-end">
+        {result.map((item, index) =>
+          index === 0 ? (
+            <div key={item[0]} className="justify-self-end text-2xl">
+              <span>{`The winner is player ${item[0]} with `}</span>
+              <span className="font-semibold">{item[1]}</span>
+              <span>{` points`}</span>
+            </div>
+          ) : (
+            <div key={item[0]} className="justify-self-end">
               <span>{`player ${item[0]} gets `}</span>
               <span className="font-semibold">{item[1]}</span>
               <span>{` points and takes ${index + 1}`}</span>
@@ -84,8 +96,8 @@ const MainForm = () => {
               </span>
               <span>{` place`}</span>
             </div>
-          </>
-        ))}
+          )
+        )}
       </div>
     </>
   );
