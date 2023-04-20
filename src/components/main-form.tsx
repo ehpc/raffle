@@ -28,7 +28,7 @@ const MainForm = () => {
   );
 
   const onSubmit: FormEventHandler<HTMLFormElement> = useCallback(
-    async (e) => {
+    (e) => {
       e.preventDefault();
       if (!value) {
         setInputError("required");
@@ -39,22 +39,26 @@ const MainForm = () => {
 
       setInputError("");
       setError("");
-      try {
-        const response = await fetch(
-          `/api/chose-winner?participants=${value}`,
-          {
-            method: "GET",
+
+      setTimeout(async () => {
+        try {
+          const response = await fetch(
+            `/api/chose-winner?participants=${value}`,
+            {
+              method: "GET",
+            }
+          );
+          if (response.status !== 200) {
+            throw new Error();
           }
-        );
-        if (response.status !== 200) {
-          throw new Error();
+          setResult(await response.json());
+        } catch {
+          setError("Unknown error");
+          setResult([]);
+        } finally {
+          setIsLoading(false);
         }
-        setResult(await response.json());
-      } catch {
-        setError("Unknown error");
-      } finally {
-        setIsLoading(false);
-      }
+      }, 2000);
     },
     [value]
   );
@@ -102,9 +106,11 @@ const MainForm = () => {
           </div>
         )}
       </form>
-      <div className={classNames("flex flex-col gap-4 mt-10", inter.className)}>
-        {!isLoading ? (
-          result.map((item, index) =>
+      {!isLoading ? (
+        <div
+          className={classNames("flex flex-col gap-4 mt-10", inter.className)}
+        >
+          {result.map((item, index) =>
             index === 0 ? (
               <div key={item[0]} className="justify-self-end text-2xl">
                 <span>{`The winner is player ${item[0]} with `}</span>
@@ -122,11 +128,13 @@ const MainForm = () => {
                 <span>{` place`}</span>
               </div>
             )
-          )
-        ) : (
-          <div className="text-9xl animate-spin">💩</div>
-        )}
-      </div>
+          )}
+        </div>
+      ) : (
+        <div className="text-9xl mt-20">
+          <div className="animate-spin pb-10">💩</div>
+        </div>
+      )}
     </>
   );
 };
