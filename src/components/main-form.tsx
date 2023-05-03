@@ -2,7 +2,6 @@
 
 import {
   ChangeEventHandler,
-  Dispatch,
   FormEventHandler,
   useCallback,
   useState,
@@ -65,46 +64,50 @@ const MainForm = () => {
 
   return (
     <>
-      <form onSubmit={onSubmit}>
-        <input
-          value={value}
-          onChange={onInputChange}
-          type="text"
-          placeholder="list of participants"
-          className={classNames(
-            "p-4 rounded-xl outline-none bg-slate-700 border border-solid",
-            inputError ? "border-red-600" : "border-slate-400",
-            inter.className
-          )}
-        />
-        <button
-          type="submit"
-          aria-label="go"
-          className="ml-8 p-4 hover:opacity-60 duration-75 disabled:opacity-60"
-          disabled={isLoading}
-        >
-          Go
-        </button>
-        {inputError && (
-          <div
-            className={classNames(
-              "mt-1 text-red-600 font-medium",
-              inter.className
+      <form onSubmit={onSubmit} className="flex w-full justify-center">
+        <div className="flex gap-6 items-start justify-center w-full">
+          <div className="w-full sm:w-auto">
+            <input
+              value={value}
+              onChange={onInputChange}
+              type="text"
+              placeholder="list of participants"
+              className={classNames(
+                "p-4 rounded-xl outline-none bg-slate-700 border border-solid w-full flex-1",
+                inputError ? "border-red-600" : "border-slate-400",
+                inter.className
+              )}
+            />
+            {inputError && (
+              <div
+                className={classNames(
+                  "mt-1 text-red-600 font-medium",
+                  inter.className
+                )}
+              >
+                {inputError}
+              </div>
             )}
-          >
-            {inputError}
-          </div>
-        )}
-        {error && (
-          <div
-            className={classNames(
-              "mt-6 text-red-600 font-medium",
-              inter.className
+            {error && (
+              <div
+                className={classNames(
+                  "mt-6 text-red-600 font-medium",
+                  inter.className
+                )}
+              >
+                {error}
+              </div>
             )}
-          >
-            {error}
           </div>
-        )}
+          <button
+            type="submit"
+            aria-label="go"
+            className="p-4 hover:opacity-60 duration-75 disabled:opacity-60"
+            disabled={isLoading}
+          >
+            Go
+          </button>
+        </div>
       </form>
       {!isLoading ? (
         <div
