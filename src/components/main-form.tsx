@@ -20,9 +20,7 @@ const MainForm = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const onInputChange: ChangeEventHandler<HTMLInputElement> = useCallback(
-    (e) => {
-      setValue(e.target.value ?? "");
-    },
+    ({ target: { value }}) => setValue(value ?? ""),
     []
   );
 
@@ -42,10 +40,7 @@ const MainForm = () => {
       setTimeout(async () => {
         try {
           const response = await fetch(
-            `/api/chose-winner?participants=${value}`,
-            {
-              method: "GET",
-            }
+            `/api/chose-winner?participants=${value}`
           );
           if (response.status !== 200) {
             throw new Error();
@@ -113,17 +108,17 @@ const MainForm = () => {
         <div
           className={classNames("flex flex-col gap-4 mt-10", inter.className)}
         >
-          {result.map((item, index) =>
+          {result.map(([playerId, points], index) =>
             index === 0 ? (
-              <div key={item[0]} className="justify-self-end text-2xl">
-                <span>{`The winner is player ${item[0]} with `}</span>
-                <span className="font-semibold">{item[1]}</span>
+              <div key={`player${playerId}`} className="justify-self-end text-2xl">
+                <span>{`The winner is player ${playerId} with `}</span>
+                <span className="font-semibold">{points}</span>
                 <span>{` points`}</span>
               </div>
             ) : (
-              <div key={item[0]} className="justify-self-end">
-                <span>{`player ${item[0]} gets `}</span>
-                <span className="font-semibold">{item[1]}</span>
+              <div key={`player${playerId}`} className="justify-self-end">
+                <span>{`player ${playerId} gets `}</span>
+                <span className="font-semibold">{points}</span>
                 <span>{` points and takes ${index + 1}`}</span>
                 <span className="align-super text-xs">
                   {getPlaceSuffix(index + 1, "en")}
@@ -136,6 +131,7 @@ const MainForm = () => {
       ) : (
         <div className="text-9xl mt-20">
           <div className="animate-spin pb-10">💩</div>
+          <div className="animate-spin transform rotate-180 pb-10">💩</div>
         </div>
       )}
     </>
