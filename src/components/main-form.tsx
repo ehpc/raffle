@@ -131,7 +131,7 @@ const MainForm = () => {
       ) : (
         <div className="text-9xl mt-20">
           <div className="animate-spin pb-10">💩</div>
-          <div className="animate-spin transform rotate-180 pb-10">💩</div>
+          <div className="animate-[spin_1s_linear_reverse_infinite] pb-10">💩</div>
         </div>
       )}
     </>
